@@ -25,4 +25,7 @@ public class AppRole {
     @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
     private Set<AppPermission> permissions = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<AppUser> users = new HashSet<>();
+
 }

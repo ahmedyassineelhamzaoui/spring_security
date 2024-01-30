@@ -26,12 +26,13 @@ public class AppUser implements UserDetails {
 
     private String lastName;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
 
     @ManyToMany(mappedBy = "users",fetch = FetchType.EAGER)
-    private Set<AppRole> roles = new HashSet<>();
+    private Set<AppRole> authorities = new HashSet<>();
 
 
     @Override
