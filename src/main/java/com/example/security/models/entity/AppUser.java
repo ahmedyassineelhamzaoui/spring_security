@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,10 @@ public class AppUser implements UserDetails {
     private String username;
 
     private String password;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "users",fetch = FetchType.EAGER)
     private Set<AppRole> authorities = new HashSet<>();
