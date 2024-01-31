@@ -8,6 +8,7 @@ import com.example.security.models.entity.AppUser;
 import com.example.security.repositories.UserRepository;
 import com.example.security.services.facades.security.AuthenticationService;
 import com.example.security.services.facades.security.JwtService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +31,9 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
 
 
        @Override
-       public LoginResponse login(LoginRequest request) {
+       public LoginResponse login(@RequestBody @Valid  LoginRequest request) {
               try{
-                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()))
+                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
               }catch(AuthenticationException e){
                      throw new IllegalArgumentException("invalid username or password");
               }
@@ -39,7 +44,9 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        }
 
        @Override
-       public SignupResponse signup(SignupRequest request) {
-              ;
+       public SignupResponse signup(@RequestBody @Valid  SignupRequest request) {
+              var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).username(request.getUsername()).authorities(new HashSet<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+              userRepository.save(user);
+              return SignupResponse.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).username(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
        }
 }
