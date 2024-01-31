@@ -16,7 +16,8 @@ public class PermissionSeeder {
         List<AppPermission> permissions = List.of(
                 AppPermission.builder().name("CAN_EDIT").build(),
                 AppPermission.builder().name("CAN_ADD").build(),
-                AppPermission.builder().name("CAN_DELETE").build()
+                AppPermission.builder().name("CAN_DELETE").build(),
+                AppPermission.builder().name("CAN_ADD_POST").build()
         );
         permissionRepository.saveAll(permissions);
     }

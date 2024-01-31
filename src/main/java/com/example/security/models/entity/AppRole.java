@@ -3,9 +3,7 @@ package com.example.security.models.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -23,9 +21,9 @@ public class AppRole {
     private String name;
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
-    private Set<AppPermission> permissions = new HashSet<>();
+    private List<AppPermission> permissions = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<AppUser> users = new HashSet<>();
+    private List<AppUser> users = new ArrayList<>();
 
 }

@@ -2,14 +2,9 @@ package com.example.security.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -37,7 +32,7 @@ public class AppUser implements UserDetails {
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "users",fetch = FetchType.EAGER)
-    private Set<AppRole> authorities = new HashSet<>();
+    private List<AppRole> authorities = new ArrayList<>();
 
 
     @Override
