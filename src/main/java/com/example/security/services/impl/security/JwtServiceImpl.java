@@ -1,5 +1,6 @@
 package com.example.security.services.impl.security;
 
+import com.example.security.models.entity.AppRole;
 import com.example.security.services.facades.security.JwtService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -44,7 +45,16 @@ public class JwtServiceImpl implements JwtService {
         Map<String,Object> roles= new HashMap<>();
         Map<String,Object> permissions = new HashMap<>();
         Map<String,Object> extraClaims= new HashMap<>();
-        roles.put("roles",userDetails.getAuthorities().stream().map(role -> role.getAuthority()).collect(Collectors.toList()));
+
+        roles.put("roles",userDetails.getAuthorities().stream()
+                .map(role -> role.getAuthority())
+                .collect(Collectors.toList()));
+        permissions.put("permissions", userDetails.getAuthorities().stream()
+                .flatMap(role -> ((AppRole) role).getPermissions().stream())
+                .map(permission -> permission.getName())
+                .collect(Collectors.toList()));
+        extraClaims.put("roles", roles);
+        extraClaims.put("permissions", permissions);
         return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
