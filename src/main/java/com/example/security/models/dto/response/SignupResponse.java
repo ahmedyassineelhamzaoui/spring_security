@@ -3,6 +3,7 @@ package com.example.security.models.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -17,6 +18,6 @@ public class SignupResponse {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime  createdAt;
+    private LocalDateTime updatedAt;
 }
