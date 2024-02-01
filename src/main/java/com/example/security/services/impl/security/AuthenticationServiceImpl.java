@@ -1,5 +1,6 @@
 package com.example.security.services.impl.security;
 
+import com.example.security.common.exceptions.custom.EmailVerificationException;
 import com.example.security.common.exceptions.custom.UserAllReadyExistException;
 import com.example.security.models.dto.request.LoginRequest;
 import com.example.security.models.dto.request.SignupRequest;
@@ -42,7 +43,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
               }
               AppUser user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("email not exist "));
               if(!user.isEnabled()){
-                     throw new EmailVerficationException("please verify your email to enable your account");
+                     throw new EmailVerificationException("please verify your email to enable your account");
               }else{
                      var jwtAccessToken = jwtService.generateAccessToken(user);
                      var jwtRefreshToken = jwtService.generateRefreshToken(user);
