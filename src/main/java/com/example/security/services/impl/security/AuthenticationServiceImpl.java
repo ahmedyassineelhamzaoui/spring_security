@@ -41,9 +41,14 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
                      throw new IllegalArgumentException("invalid email or password");
               }
               AppUser user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("email not exist "));
-              var jwtAccessToken = jwtService.generateAccessToken(user);
-              var jwtRefreshToken = jwtService.generateRefreshToken(user);
-              return LoginResponse.builder().firstName(user.getFirstName()).lastName(user.getLastName()).accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
+              if(!user.isEnabled()){
+                     throw new EmailVerficationException("please verify your email to enable your account");
+              }else{
+                     var jwtAccessToken = jwtService.generateAccessToken(user);
+                     var jwtRefreshToken = jwtService.generateRefreshToken(user);
+                     return LoginResponse.builder().firstName(user.getFirstName()).lastName(user.getLastName()).accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
+              }
+
        }
 
        @Override
@@ -54,6 +59,6 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
                                                                   );
               var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
               userRepository.save(user);
-              return SignupResponse.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).email(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
+              return SignupResponse.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).email(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(!user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
        }
 }
