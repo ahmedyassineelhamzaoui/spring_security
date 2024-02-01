@@ -36,20 +36,20 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
 
        @Override
        public LoginResponse login( LoginRequest request) {
-
-              AppUser user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("email not exist "));
-              if(!user.isEnabled()){
-                     throw new EmailVerificationException("please verify your email to enable your account");
-              }else{
-                     try{
+              try{
+                     AppUser user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("email not exist "));
+                     if(!user.isEnabled()){
+                            throw new EmailVerificationException("please verify your email to enable your account");
+                     }else{
                             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-                     }catch(AuthenticationException e){
-                            throw new IllegalArgumentException("invalid email or password");
+                            var jwtAccessToken = jwtService.generateAccessToken(user);
+                            var jwtRefreshToken = jwtService.generateRefreshToken(user);
+                            return LoginResponse.builder().firstName(user.getFirstName()).lastName(user.getLastName()).accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
                      }
-                     var jwtAccessToken = jwtService.generateAccessToken(user);
-                     var jwtRefreshToken = jwtService.generateRefreshToken(user);
-                     return LoginResponse.builder().firstName(user.getFirstName()).lastName(user.getLastName()).accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
+              }catch(AuthenticationException e){
+                     throw new IllegalArgumentException("invalid email or password");
               }
+
 
        }
 

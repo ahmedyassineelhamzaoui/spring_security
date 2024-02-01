@@ -14,6 +14,7 @@ import io.jsonwebtoken.Claims;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -41,26 +42,28 @@ public class JwtServiceImpl implements JwtService {
     }
     @Override
     public String generateAccessToken(UserDetails userDetails) {
+        Map<String, Object> extraClaims = new HashMap<>();
 
-        Map<String,Object> roles= new HashMap<>();
-        Map<String,Object> permissions = new HashMap<>();
-        Map<String,Object> extraClaims= new HashMap<>();
+        List<Map<String, Object>> roles = userDetails.getAuthorities().stream()
+                .map(role -> {
+                    Map<String, Object> roleMap = new HashMap<>();
+                    roleMap.put("role", role.getAuthority());
+                    roleMap.put("permissions", ((AppRole) role).getPermissions().stream()
+                            .map(permission -> permission.getName())
+                            .collect(Collectors.toList()));
+                    return roleMap;
+                })
+                .collect(Collectors.toList());
 
-        roles.put("roles",userDetails.getAuthorities().stream()
-                .map(role -> role.getAuthority())
-                .collect(Collectors.toList()));
-        permissions.put("permissions", userDetails.getAuthorities().stream()
-                .flatMap(role -> ((AppRole) role).getPermissions().stream())
-                .map(permission -> permission.getName())
-                .collect(Collectors.toList()));
         extraClaims.put("roles", roles);
-        extraClaims.put("permissions", permissions);
-        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .addClaims(roles)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
-
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     @Override
