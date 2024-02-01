@@ -10,6 +10,7 @@ import com.example.security.services.facades.security.AuthenticationService;
 import com.example.security.services.facades.security.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -46,6 +47,10 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
 
        @Override
        public SignupResponse signup(SignupRequest request) {
+              userRepository.findByUsername(request.getUsername())
+                                                                  .ifPresent(
+                                                                          () ->  {throw  new UserAllReadyExictException("User with this username already exist")}
+                                                                  );
               var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).username(request.getUsername()).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
               userRepository.save(user);
               return SignupResponse.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).username(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
