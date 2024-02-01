@@ -32,7 +32,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
 
 
        @Override
-       public LoginResponse login(@RequestBody @Valid  LoginRequest request) {
+       public LoginResponse login( LoginRequest request) {
               try{
                      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
               }catch(AuthenticationException e){
@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        }
 
        @Override
-       public SignupResponse signup(@RequestBody @Valid  SignupRequest request) {
+       public SignupResponse signup(SignupRequest request) {
               var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).username(request.getUsername()).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
               userRepository.save(user);
               return SignupResponse.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).username(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
