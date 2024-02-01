@@ -27,6 +27,14 @@ public class AppUser implements UserDetails {
 
     private String password;
 
+    private boolean accountNonExpired ;
+
+    private boolean accountNonLocked ;
+
+    private boolean credentialsNonExpired ;
+
+    private boolean enabled ;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -39,23 +47,4 @@ public class AppUser implements UserDetails {
         return email;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
