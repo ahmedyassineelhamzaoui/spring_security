@@ -1,6 +1,7 @@
 package com.example.security.controllers;
 
 import com.example.security.common.responses.ResponseWithoutDetails;
+import com.example.security.models.dto.request.LoginRequest;
 import com.example.security.models.dto.request.SignupRequest;
 import com.example.security.models.dto.response.LoginResponse;
 import com.example.security.models.dto.response.SignupResponse;
@@ -26,6 +27,11 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signup(@RequestBody @Valid SignupRequest request){
         return ResponseEntity.ok(authenticationService.signup(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request){
+        return ResponseEntity.ok(authenticationService.login(request));
     }
 
 
