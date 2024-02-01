@@ -27,13 +27,13 @@ public class AppUser implements UserDetails {
 
     private String password;
 
-    private boolean accountNonExpired ;
+    private boolean accountNonExpired=true ;
 
-    private boolean accountNonLocked ;
+    private boolean accountNonLocked =true;
 
-    private boolean credentialsNonExpired ;
+    private boolean credentialsNonExpired=true ;
 
-    private boolean enabled ;
+    private boolean enabled =true;
 
     private LocalDateTime createdAt;
 

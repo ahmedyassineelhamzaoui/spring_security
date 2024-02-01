@@ -43,6 +43,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
               }
               AppUser user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("email not exist "));
               if(!user.isEnabled()){
+                     System.out.println("yes yes");
                      throw new EmailVerificationException("please verify your email to enable your account");
               }else{
                      var jwtAccessToken = jwtService.generateAccessToken(user);
