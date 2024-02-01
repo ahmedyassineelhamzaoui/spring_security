@@ -19,7 +19,6 @@ public class UserSeeder {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
     private final UserService userService;
 
     public void seed(){

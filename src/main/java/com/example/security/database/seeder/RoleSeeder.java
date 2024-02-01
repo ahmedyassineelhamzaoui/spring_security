@@ -3,6 +3,7 @@ package com.example.security.database.seeder;
 import com.example.security.models.entity.AppRole;
 import com.example.security.repositories.PermissionRepository;
 import com.example.security.repositories.RoleRepository;
+import com.example.security.services.facades.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class RoleSeeder {
     private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
+    private final RoleService roleService;
     public void seed(){
         if(roleRepository.count() == 0){
             List<AppRole> roles = List.of(
@@ -26,25 +27,17 @@ public class RoleSeeder {
         }
     }
     private void assignPermissionsToRoles() {
-        AppRole superAdmin = roleRepository.findByAuthority("SUPER_ADMIN").orElseThrow(() -> new NoSuchElementException("role not found"));
-        superAdmin.setPermissions(permissionRepository.findAll());
-        roleRepository.save(superAdmin);
 
-        AppRole admin = roleRepository.findByAuthority("ADMIN").orElseThrow(() -> new NoSuchElementException("role not found"));
-        admin.setPermissions(List.of(
-                permissionRepository.findByName("CAN_ADD")
-                        .orElseThrow(() -> new NoSuchElementException("permission not found")),
-                permissionRepository.findByName("CAN_EDIT")
-                        .orElseThrow(() -> new NoSuchElementException("permission not found"))
-        ));
-        roleRepository.save(admin);
+        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_ADD");
+        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_DELETE");
+        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_ADD_POST");
+        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_EDIT");
 
-        AppRole user = roleRepository.findByAuthority("USER").orElseThrow(() -> new NoSuchElementException("role not found"));
-        user.setPermissions(List.of(
-                        permissionRepository.findByName("CAN_ADD_POST")
-                                .orElseThrow(() -> new NoSuchElementException("permission not found"))
-                )
-        );
-        roleRepository.save(user);
+        roleService.AddPermissionToRole("ADMIN","CAN_ADD");
+        roleService.AddPermissionToRole("ADMIN","CAN_EDIT");
+        roleService.AddPermissionToRole("ADMIN","CAN_ADD_POST");
+
+        roleService.AddPermissionToRole("USER","CAN_ADD_POST");
+
     }
 }
