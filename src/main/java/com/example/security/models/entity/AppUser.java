@@ -34,7 +34,6 @@ public class AppUser implements UserDetails {
     @ManyToMany(mappedBy = "users",fetch = FetchType.EAGER)
     private List<AppRole> authorities = new ArrayList<>();
 
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

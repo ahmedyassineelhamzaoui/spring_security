@@ -17,20 +17,20 @@ public class RoleSeeder {
     public void seed(){
         if(roleRepository.count() == 0){
             List<AppRole> roles = List.of(
-                    AppRole.builder().name("SUPER_ADMIN").build(),
-                    AppRole.builder().name("ADMIN").build(),
-                    AppRole.builder().name("USER").build()
+                    AppRole.builder().authority("SUPER_ADMIN").build(),
+                    AppRole.builder().authority("ADMIN").build(),
+                    AppRole.builder().authority("USER").build()
             );
             roleRepository.saveAll(roles);
             assignPermissionsToRoles();
         }
     }
     private void assignPermissionsToRoles() {
-        AppRole superAdmin = roleRepository.findByName("SUPER_ADMIN").orElseThrow(() -> new NoSuchElementException("role not found"));
+        AppRole superAdmin = roleRepository.findByAuthority("SUPER_ADMIN").orElseThrow(() -> new NoSuchElementException("role not found"));
         superAdmin.setPermissions(permissionRepository.findAll());
         roleRepository.save(superAdmin);
 
-        AppRole admin = roleRepository.findByName("ADMIN").orElseThrow(() -> new NoSuchElementException("role not found"));
+        AppRole admin = roleRepository.findByAuthority("ADMIN").orElseThrow(() -> new NoSuchElementException("role not found"));
         admin.setPermissions(List.of(
                 permissionRepository.findByName("CAN_ADD")
                         .orElseThrow(() -> new NoSuchElementException("permission not found")),
@@ -39,7 +39,7 @@ public class RoleSeeder {
         ));
         roleRepository.save(admin);
 
-        AppRole user = roleRepository.findByName("USER").orElseThrow(() -> new NoSuchElementException("role not found"));
+        AppRole user = roleRepository.findByAuthority("USER").orElseThrow(() -> new NoSuchElementException("role not found"));
         user.setPermissions(List.of(
                         permissionRepository.findByName("CAN_ADD_POST")
                                 .orElseThrow(() -> new NoSuchElementException("permission not found"))

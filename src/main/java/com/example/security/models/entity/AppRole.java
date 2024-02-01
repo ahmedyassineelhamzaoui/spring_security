@@ -2,6 +2,7 @@ package com.example.security.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.*;
 
@@ -11,14 +12,14 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppRole {
+public class AppRole implements GrantedAuthority {
 
     @Id
     @GeneratedValue(generator = "uuid2")
     private UUID id;
 
     @Column(unique = true)
-    private String name;
+    private String authority;
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER)
     private List<AppPermission> permissions = new ArrayList<>();

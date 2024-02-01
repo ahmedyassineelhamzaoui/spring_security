@@ -14,8 +14,8 @@ public class DatabaseSeeder {
 
     @PostConstruct
     public void init(){
-        roleSeeder.seed();
         permissionSeeder.seed();
+        roleSeeder.seed();
         userSeeder.seed();
     }
 }

@@ -1,16 +1,17 @@
 package com.example.security.models.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.*;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class AppPermission {
 
     @Id

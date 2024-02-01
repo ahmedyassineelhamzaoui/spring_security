@@ -3,6 +3,7 @@ package com.example.security.database.seeder;
 import com.example.security.models.entity.AppUser;
 import com.example.security.repositories.RoleRepository;
 import com.example.security.repositories.UserRepository;
+import com.example.security.services.facades.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ public class UserSeeder {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final UserService userService;
 
     public void seed(){
         if(userRepository.count() == 0){
@@ -69,34 +71,20 @@ public class UserSeeder {
         }
     }
     private void assignRolesToUsers(){
-        AppUser user1 = userRepository.findByUsername("john123").orElseThrow(() -> new UsernameNotFoundException("username not found"));
-        user1.setAuthorities(roleRepository.findAll());
-        userRepository.save(user1);
 
-        AppUser user2 = userRepository.findByUsername("jane456").orElseThrow(() -> new UsernameNotFoundException("username not found"));
-        user1.setAuthorities(List.of(
-                roleRepository.findByName("ADMIN").orElseThrow(() -> new NoSuchElementException("role not found")),
-                roleRepository.findByName("USER").orElseThrow(() -> new NoSuchElementException("role not found"))
-        ));
-        userRepository.save(user2);
+        userService.AddRoleToUser("john123", "SUPER_ADMIN");
+        userService.AddRoleToUser("john123", "ADMIN");
+        userService.AddRoleToUser("john123", "USER");
 
-        AppUser user3 = userRepository.findByUsername("mike789").orElseThrow(() -> new UsernameNotFoundException("username not found"));
-        user3.setAuthorities(List.of(
-                roleRepository.findByName("ADMIN").orElseThrow(() -> new NoSuchElementException("role not found")),
-                roleRepository.findByName("USER").orElseThrow(() -> new NoSuchElementException("role not found"))
-        ));
-        userRepository.save(user3);
+        userService.AddRoleToUser("jane456", "SUPER_ADMIN");
+        userService.AddRoleToUser("jane456", "ADMIN");
 
-        AppUser user4 = userRepository.findByUsername("sarah1011").orElseThrow(() -> new UsernameNotFoundException("username not found"));
-        user4.setAuthorities(List.of(
-                roleRepository.findByName("ADMIN").orElseThrow(() -> new NoSuchElementException("role not found"))
-        ));
-        userRepository.save(user4);
+        userService.AddRoleToUser("mike789", "SUPER_ADMIN");
+        userService.AddRoleToUser("mike789", "ADMIN");
 
-        AppUser user5 = userRepository.findByUsername("rob1213").orElseThrow(() -> new UsernameNotFoundException("username not found"));
-        user5.setAuthorities(List.of(
-                roleRepository.findByName("USER").orElseThrow(() -> new NoSuchElementException("role not found"))
-        ));
-        userRepository.save(user5);
+        userService.AddRoleToUser("sarah1011", "ADMIN");
+
+        userService.AddRoleToUser("rob1213", "USER");
+
     }
 }

@@ -1,14 +1,11 @@
-#DataBase configuration
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/security_app
     username: postgres
     password: yassine
-#Hibernate configuration
-jpa:
-  hibernate:
-    ddl-auto: none
-    show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 #token key
 token:
