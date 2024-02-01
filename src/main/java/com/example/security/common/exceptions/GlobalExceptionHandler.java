@@ -1,6 +1,7 @@
 package com.example.security.common.exceptions;
 
 
+import com.example.security.common.exceptions.custom.UserAllReadyExistException;
 import com.example.security.common.responses.ResponseWithDetails;
 import com.example.security.common.responses.ResponseWithoutDetails;
 import lombok.RequiredArgsConstructor;
@@ -68,5 +69,12 @@ public class GlobalExceptionHandler {
         errors.put("Error", illegalArgumentException.getMessage());
         responseWithDetails.setDetails(errors);
         return ResponseEntity.badRequest().body(responseWithDetails);
+    }
+    @ExceptionHandler(UserAllReadyExistException.class)
+    public ResponseEntity<ResponseWithoutDetails> handleUserAlreadyExistException(UserAllReadyExistException e){
+        responseWithoutDetails.setTimesTamps(LocalDateTime.now());
+        responseWithoutDetails.setStatus("404");
+        responseWithoutDetails.setMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseWithoutDetails);
     }
 }
