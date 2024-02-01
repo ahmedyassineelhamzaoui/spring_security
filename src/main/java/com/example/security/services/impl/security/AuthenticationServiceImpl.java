@@ -1,5 +1,6 @@
 package com.example.security.services.impl.security;
 
+import com.example.security.common.exceptions.custom.UserAllReadyExistException;
 import com.example.security.models.dto.request.LoginRequest;
 import com.example.security.models.dto.request.SignupRequest;
 import com.example.security.models.dto.response.LoginResponse;
@@ -49,7 +50,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        public SignupResponse signup(SignupRequest request) {
               userRepository.findByUsername(request.getUsername())
                                                                   .ifPresent(
-                                                                          () ->  {throw  new UserAllReadyExictException("User with this username already exist")}
+                                                                          () ->  {throw  new UserAllReadyExistException("User with this username already exist")}
                                                                   );
               var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).username(request.getUsername()).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
               userRepository.save(user);
