@@ -27,7 +27,7 @@ public class UserSeeder {
                     AppUser.builder()
                             .firstName("John")
                             .lastName("Doe")
-                            .username("john123")
+                            .email("john123@gmail.com")
                             .password(passwordEncoder.encode("1234Password@!"))
                             .createdAt(LocalDateTime.now())
                             .updatedAt(LocalDateTime.now())
@@ -35,7 +35,7 @@ public class UserSeeder {
             AppUser.builder()
                     .firstName("Jane")
                     .lastName("Doe")
-                    .username("jane456")
+                    .email("jane456@gmail.com")
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -43,7 +43,7 @@ public class UserSeeder {
             AppUser.builder()
                     .firstName("Mike")
                     .lastName("Smith")
-                    .username("mike789")
+                    .email("mike789@gmail.com")
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -51,7 +51,7 @@ public class UserSeeder {
             AppUser.builder()
                     .firstName("Sarah")
                     .lastName("Williams")
-                    .username("sarah1011")
+                    .email("sarah1011@gmail.com")
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -59,7 +59,7 @@ public class UserSeeder {
             AppUser.builder()
                     .firstName("Robert")
                     .lastName("Johnson")
-                    .username("rob1213")
+                    .email("rob1213@gmail.com")
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -71,19 +71,19 @@ public class UserSeeder {
     }
     private void assignRolesToUsers(){
 
-        userService.AddRoleToUser("john123", "SUPER_ADMIN");
-        userService.AddRoleToUser("john123", "ADMIN");
-        userService.AddRoleToUser("john123", "USER");
+        userService.AddRoleToUser("john123@gmail.com", "SUPER_ADMIN");
+        userService.AddRoleToUser("john123@gmail.com", "ADMIN");
+        userService.AddRoleToUser("john123@gmail.com", "USER");
 
-        userService.AddRoleToUser("jane456", "SUPER_ADMIN");
-        userService.AddRoleToUser("jane456", "ADMIN");
+        userService.AddRoleToUser("jane456@gmail.com", "SUPER_ADMIN");
+        userService.AddRoleToUser("jane456@gmail.com", "ADMIN");
 
-        userService.AddRoleToUser("mike789", "SUPER_ADMIN");
-        userService.AddRoleToUser("mike789", "ADMIN");
+        userService.AddRoleToUser("mike789@gmail.com", "SUPER_ADMIN");
+        userService.AddRoleToUser("mike789@gmail.com", "ADMIN");
 
-        userService.AddRoleToUser("sarah1011", "ADMIN");
+        userService.AddRoleToUser("sarah1011@gmail.com", "ADMIN");
 
-        userService.AddRoleToUser("rob1213", "USER");
+        userService.AddRoleToUser("rob1213@gmail.com", "USER");
 
     }
 }

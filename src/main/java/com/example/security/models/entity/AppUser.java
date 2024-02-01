@@ -23,7 +23,7 @@ public class AppUser implements UserDetails {
     private String lastName;
 
     @Column(unique = true)
-    private String username;
+    private String email;
 
     private String password;
 
@@ -33,6 +33,11 @@ public class AppUser implements UserDetails {
 
     @ManyToMany(mappedBy = "users",fetch = FetchType.EAGER)
     private List<AppRole> authorities = new ArrayList<>();
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 
     @Override
     public boolean isAccountNonExpired() {

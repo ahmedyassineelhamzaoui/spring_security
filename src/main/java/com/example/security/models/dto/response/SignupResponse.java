@@ -15,7 +15,7 @@ public class SignupResponse {
     private UUID id;
     private String firstName;
     private String lastName;
-    private String username;
+    private String email;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;

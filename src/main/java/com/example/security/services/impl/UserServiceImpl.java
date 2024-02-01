@@ -26,15 +26,15 @@ public class UserServiceImpl implements UserService {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(" user not found"));
+                return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(" user not found"));
             }
         };
     }
 
     @Override
     @Transactional
-    public void AddRoleToUser(String username, String roleName) {
-        AppUser user= userRepository.findByUsername(username).orElseThrow(()-> new NoSuchElementException("User not found"));
+    public void AddRoleToUser(String email, String roleName) {
+        AppUser user= userRepository.findByEmail(email).orElseThrow(()-> new NoSuchElementException("User not found"));
         AppRole role =  roleRepository.findByAuthority(roleName).orElseThrow(() -> new NoSuchElementException("Role not found"));
 
         if (user.getAuthorities() != null ) {

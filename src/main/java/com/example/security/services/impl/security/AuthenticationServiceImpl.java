@@ -36,11 +36,11 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        @Override
        public LoginResponse login( LoginRequest request) {
               try{
-                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
+                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
               }catch(AuthenticationException e){
-                     throw new IllegalArgumentException("invalid username or password");
+                     throw new IllegalArgumentException("invalid email or password");
               }
-              AppUser user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("username not exist "));
+              AppUser user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("email not exist "));
               var jwtAccessToken = jwtService.generateAccessToken(user);
               var jwtRefreshToken = jwtService.generateRefreshToken(user);
               return LoginResponse.builder().firstName(user.getFirstName()).lastName(user.getLastName()).accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
@@ -48,12 +48,12 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
 
        @Override
        public SignupResponse signup(SignupRequest request) {
-              userRepository.findByUsername(request.getUsername())
+              userRepository.findByEmail(request.getEmail())
                                                                   .ifPresent(
-                                                                          (AppUser existingUser)->  {throw  new UserAllReadyExistException("User with this username already exist");}
+                                                                          (AppUser existingUser)->  {throw  new UserAllReadyExistException("User with this email already exist");}
                                                                   );
-              var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).username(request.getUsername()).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+              var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
               userRepository.save(user);
-              return SignupResponse.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).username(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
+              return SignupResponse.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).email(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
        }
 }
