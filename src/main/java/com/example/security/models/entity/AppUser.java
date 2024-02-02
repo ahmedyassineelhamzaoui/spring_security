@@ -25,6 +25,8 @@ public class AppUser implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    private String verificationCode;
+
     private String password;
 
     private boolean accountNonExpired=true ;
