@@ -39,6 +39,10 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
                      if(!user.isEnabled()){
                             throw new EmailVerificationException("please verify your email to enable your account");
                      }else{
+                            if(!user.isCredentialsNonExpired()){
+                                   user.setCredentialsNonExpired(true);
+                                   userRepository.save(user);
+                            }
                             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
                             var jwtAccessToken = jwtService.generateAccessToken(user);
                             var jwtRefreshToken = jwtService.generateRefreshToken(user);
