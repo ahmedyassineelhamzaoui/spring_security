@@ -8,4 +8,6 @@ import com.example.security.models.dto.response.LoginResponse;
 public interface AuthenticationService  {
      LoginResponse login(LoginRequest request);
      AppUserDTO signup(SignupRequest request);
+
+     LoginResponse verifyEmail(String code,String email);
 }

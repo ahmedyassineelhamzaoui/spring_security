@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 @Service
@@ -82,6 +83,17 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
                       "Best regards,";
               emailServiceSender.sendEmail(user.getEmail(),"Email Verification Code",body);
               return AppUserDTO.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).email(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
+       }
+
+       @Override
+       public LoginResponse verifyEmail(String email,String code) {
+              var user = userRepository.findByEmail(email).orElseThrow(()-> new NoSuchElementException("User  not found with this email"));
+              if(!user.getVerificationCode().equals(code)){
+                     throw new EmailVerificationException("verification code wrong");
+              }
+              var jwtAccessToken = jwtService.generateAccessToken(user);
+              var jwtRefreshToken = jwtService.generateRefreshToken(user);
+              return LoginResponse.builder().firstName(user.getFirstName()).lastName(user.getLastName()).accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
        }
 
        private  String generateVerificationCode() {

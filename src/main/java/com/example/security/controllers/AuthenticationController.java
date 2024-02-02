@@ -4,6 +4,7 @@ import com.example.security.common.responses.ResponseWithDetails;
 import com.example.security.common.responses.ResponseWithoutDetails;
 import com.example.security.models.dto.request.LoginRequest;
 import com.example.security.models.dto.request.SignupRequest;
+import com.example.security.models.dto.request.VerificationEmailRequest;
 import com.example.security.models.dto.response.LoginResponse;
 import com.example.security.services.facades.UserService;
 import com.example.security.services.facades.security.AuthenticationService;
@@ -45,6 +46,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request){
         return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<LoginResponse> verifyEmail(@RequestBody @Valid VerificationEmailRequest request){
+        return ResponseEntity.ok(authenticationService.verifyEmail(request.getCode(),request.getEmail()));
     }
 
 
