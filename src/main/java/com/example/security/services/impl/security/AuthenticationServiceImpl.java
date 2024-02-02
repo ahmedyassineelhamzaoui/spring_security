@@ -9,6 +9,7 @@ import com.example.security.models.dto.response.LoginResponse;
 import com.example.security.models.entity.AppUser;
 import com.example.security.repositories.UserRepository;
 import com.example.security.services.facades.UserService;
+import com.example.security.services.facades.email.EmailServiceSender;
 import com.example.security.services.facades.security.AuthenticationService;
 import com.example.security.services.facades.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        private final JwtService jwtService;
        private final AuthenticationManager authenticationManager;
        private final UserService userService;
+       private final EmailServiceSender emailServiceSender;
 
        @Override
        public LoginResponse login( LoginRequest request) {
@@ -64,7 +67,29 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
               var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).enabled(false).credentialsNonExpired(true).accountNonLocked(true).accountNonExpired(true).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
               userRepository.save(user);
               userService.AddRoleToUser(user.getEmail(),"USER");
+              String body = "Dear "+user.getFirstName()+ ",\n" +
+                      "\n" +
+                      "Thank you for registering with our service. To verify your email address, please use the following verification code:\n" +
+                      "\n" +
+                      "Verification Code: "+generateVerificationCode()+"\n" +
+                      "\n" +
+                      "Please enter this code on the verification page to complete the registration process.\n" +
+                      "\n" +
+                      "If you did not request this verification, please ignore this email.\n" +
+                      "\n" +
+                      "Best regards,";
+              emailServiceSender.sendEmail(user.getEmail(),"Email Verification Code",body);
               return AppUserDTO.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName()).email(user.getUsername()).accountNonExpired(user.isAccountNonExpired()).accountNonLocked(user.isAccountNonLocked()).credentialsNonExpired(user.isCredentialsNonExpired()).enabled(user.isEnabled()).createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
+       }
+
+       private  String generateVerificationCode() {
+              int codeLength = 6;
+              StringBuilder verificationCode = new StringBuilder();
+              for (int i = 0; i < codeLength; i++) {
+                     verificationCode.append(new Random().nextInt(10));
+              }
+
+              return verificationCode.toString();
        }
 
 }
