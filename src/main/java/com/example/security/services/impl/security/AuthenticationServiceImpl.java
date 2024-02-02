@@ -64,14 +64,16 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
                                       .ifPresent(
                                               (AppUser existingUser)->  {throw  new UserAllReadyExistException("User with this email already exist");}
                                       );
-              var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).enabled(false).credentialsNonExpired(true).accountNonLocked(true).accountNonExpired(true).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+              String verificationCode = generateVerificationCode();
+              var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).verificationCode(verificationCode).enabled(false).credentialsNonExpired(true).accountNonLocked(true).accountNonExpired(true).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+
               userRepository.save(user);
               userService.AddRoleToUser(user.getEmail(),"USER");
               String body = "Dear "+user.getFirstName()+ ",\n" +
                       "\n" +
                       "Thank you for registering with our service. To verify your email address, please use the following verification code:\n" +
                       "\n" +
-                      "Verification Code: "+generateVerificationCode()+"\n" +
+                      "Verification Code: "+verificationCode+"\n" +
                       "\n" +
                       "Please enter this code on the verification page to complete the registration process.\n" +
                       "\n" +
