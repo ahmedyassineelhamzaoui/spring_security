@@ -6,7 +6,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ahmed.yassin.elhamzaoui2019@gmail.com
+    password: hswxtybmtwpxjriv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 #token key
 token:
   signing:
