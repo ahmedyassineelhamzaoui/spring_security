@@ -10,6 +10,7 @@ import com.example.security.models.entity.AppUser;
 import com.example.security.repositories.UserRepository;
 import com.example.security.services.facades.UserService;
 import com.example.security.services.facades.email.EmailServiceSender;
+import com.example.security.services.facades.email.VerificationCodeService;
 import com.example.security.services.facades.security.AuthenticationService;
 import com.example.security.services.facades.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        private final AuthenticationManager authenticationManager;
        private final UserService userService;
        private final EmailServiceSender emailServiceSender;
+       private final VerificationCodeService verificationCodeService;
 
        @Override
        public LoginResponse login( LoginRequest request) {
@@ -86,11 +88,10 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        }
 
        @Override
-       public LoginResponse verifyEmail(String email,String code) {
-              var user = userRepository.findByEmail(email).orElseThrow(()-> new NoSuchElementException("User  not found with this email"));
-              if(!user.getVerificationCode().equals(code)){
-                     throw new EmailVerificationException("verification code wrong");
-              }
+       public LoginResponse verifyEmail(String code) {
+              var user = userRepository.findByVerificationCode(code).orElseThrow(()-> new NoSuchElementException("Wrong Code"));
+              user.setEnabled(true);
+              userRepository.save(user);
               var jwtAccessToken = jwtService.generateAccessToken(user);
               var jwtRefreshToken = jwtService.generateRefreshToken(user);
               return LoginResponse.builder().firstName(user.getFirstName()).lastName(user.getLastName()).accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
@@ -102,7 +103,10 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
               for (int i = 0; i < codeLength; i++) {
                      verificationCode.append(new Random().nextInt(10));
               }
-
+              String code = verificationCode.toString();
+              if(!verificationCodeService.verifyExistCode(code)){
+                     generateVerificationCode();
+              }
               return verificationCode.toString();
        }
 

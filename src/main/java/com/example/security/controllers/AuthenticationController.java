@@ -50,7 +50,7 @@ public class AuthenticationController {
 
     @PostMapping("/verify-email")
     public ResponseEntity<LoginResponse> verifyEmail(@RequestBody @Valid VerificationEmailRequest request){
-        return ResponseEntity.ok(authenticationService.verifyEmail(request.getCode(),request.getEmail()));
+        return ResponseEntity.ok(authenticationService.verifyEmail(request.getCode()));
     }
 
 
