@@ -1,11 +1,14 @@
 package com.example.security.common.exceptions;
 
 
+import com.example.security.common.exceptions.custom.BadRequestException;
 import com.example.security.common.exceptions.custom.EmailVerificationException;
+import com.example.security.common.exceptions.custom.InvalidOauth2Exception;
 import com.example.security.common.exceptions.custom.UserAllReadyExistException;
 import com.example.security.common.responses.ResponseWithDetails;
 import com.example.security.common.responses.ResponseWithoutDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
 
     private final ResponseWithDetails responseWithDetails;
     private final ResponseWithoutDetails responseWithoutDetails;
@@ -46,7 +50,7 @@ public class GlobalExceptionHandler {
 
         responseWithoutDetails.setTimesTamps(LocalDateTime.now());
         responseWithoutDetails.setStatus("404");
-        responseWithoutDetails.setMessage("no such element exception");
+        responseWithoutDetails.setMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseWithoutDetails);
     }
 
@@ -84,5 +88,19 @@ public class GlobalExceptionHandler {
         responseWithoutDetails.setStatus("400");
         responseWithoutDetails.setMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseWithoutDetails);
+    }
+    @ExceptionHandler(InvalidOauth2Exception.class)
+    public ResponseEntity<ResponseWithoutDetails> handleInvalidOauth2Exception(InvalidOauth2Exception e){
+        responseWithoutDetails.setTimesTamps(LocalDateTime.now());
+        responseWithoutDetails.setStatus("400");
+        responseWithoutDetails.setMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(responseWithoutDetails);
+    }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ResponseWithoutDetails> handleBadRequestException(BadRequestException e){
+        responseWithoutDetails.setTimesTamps(LocalDateTime.now());
+        responseWithoutDetails.setStatus("400");
+        responseWithoutDetails.setMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseWithoutDetails);
     }
 }

@@ -32,18 +32,7 @@ public class UserServiceImpl implements UserService {
         };
     }
 
-    @Override
-    @Transactional
-    public void AddRoleToUser(String email, String roleName) {
-        AppUser user= userRepository.findByEmail(email).orElseThrow(()-> new NoSuchElementException("User not found"));
-        AppRole role =  roleRepository.findByAuthority(roleName).orElseThrow(() -> new NoSuchElementException("Role not found"));
 
-        if (user.getAuthorities() != null ) {
-            user.getAuthorities().add(role);
-            role.getUsers().add(user);
-        }
-
-    }
 
     @Override
     public List<AppUser> getAllUsers() {

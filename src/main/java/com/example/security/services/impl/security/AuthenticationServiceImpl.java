@@ -11,6 +11,7 @@ import com.example.security.repositories.UserRepository;
 import com.example.security.services.facades.UserService;
 import com.example.security.services.facades.email.EmailServiceSender;
 import com.example.security.services.facades.email.VerificationCodeService;
+import com.example.security.services.facades.security.AddRoleToUserService;
 import com.example.security.services.facades.security.AuthenticationService;
 import com.example.security.services.facades.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
        private final PasswordEncoder passwordEncoder;
        private final JwtService jwtService;
        private final AuthenticationManager authenticationManager;
-       private final UserService userService;
+       private final AddRoleToUserService addRoleToUserService;
        private final EmailServiceSender emailServiceSender;
        private final VerificationCodeService verificationCodeService;
 
@@ -71,7 +72,7 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
               var user = AppUser.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).verificationCode(verificationCode).enabled(false).credentialsNonExpired(true).accountNonLocked(true).accountNonExpired(true).authorities(new ArrayList<>()).password(passwordEncoder.encode(request.getPassword())).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
 
               userRepository.save(user);
-              userService.AddRoleToUser(user.getEmail(),"USER");
+              addRoleToUserService.addRoleToUser(user.getEmail(),"USER");
               String body = "Dear "+user.getFirstName()+ ",\n" +
                       "\n" +
                       "Thank you for registering with our service. To verify your email address, please use the following verification code:\n" +

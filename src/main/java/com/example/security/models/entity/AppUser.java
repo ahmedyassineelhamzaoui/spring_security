@@ -1,7 +1,9 @@
 package com.example.security.models.entity;
 
+import com.example.security.enums.Provider;
 import jakarta.persistence.*;
 import lombok.*;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -36,6 +38,9 @@ public class AppUser implements UserDetails {
     private boolean credentialsNonExpired=true ;
 
     private boolean enabled =true;
+
+    @Column(name = "provider_id")
+    private String providerId;
 
     private LocalDateTime createdAt;
 

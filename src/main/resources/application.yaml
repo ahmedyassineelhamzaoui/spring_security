@@ -17,6 +17,28 @@ spring:
           auth: true
           starttls:
             enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 393516152554-e8sdef58mfnrhlr6psjjj0mn28rgs7r6.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
+          facebook:
+            client-id: 720301219871173
+            client-secret: 4cedb664b19d4975e3c1e4ccb06e8dc5
+            scope:
+              - email
+              - public_profile
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+
 #token key
 token:
   signing:

@@ -8,7 +8,6 @@ import java.util.List;
 public interface UserService {
 
     UserDetailsService userDetailsService();
-    void AddRoleToUser(String email,String roleName);
 
     List<AppUser> getAllUsers();
 

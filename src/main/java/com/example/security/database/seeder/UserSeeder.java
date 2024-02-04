@@ -1,9 +1,11 @@
 package com.example.security.database.seeder;
 
+import com.example.security.enums.Provider;
 import com.example.security.models.entity.AppUser;
 import com.example.security.repositories.RoleRepository;
 import com.example.security.repositories.UserRepository;
 import com.example.security.services.facades.UserService;
+import com.example.security.services.facades.security.AddRoleToUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +21,7 @@ public class UserSeeder {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
+    private final AddRoleToUserService addRoleToUserService;
 
     public void seed(){
         if(userRepository.count() == 0){
@@ -32,6 +34,7 @@ public class UserSeeder {
                             .accountNonExpired(true)
                             .credentialsNonExpired(true)
                             .enabled(true)
+                            .providerId(String.valueOf(Provider.local))
                             .password(passwordEncoder.encode("1234Password@!"))
                             .createdAt(LocalDateTime.now())
                             .updatedAt(LocalDateTime.now())
@@ -44,6 +47,7 @@ public class UserSeeder {
                     .accountNonExpired(true)
                     .credentialsNonExpired(true)
                     .enabled(true)
+                    .providerId(String.valueOf(Provider.local))
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -56,6 +60,7 @@ public class UserSeeder {
                     .accountNonExpired(true)
                     .credentialsNonExpired(true)
                     .enabled(true)
+                    .providerId(String.valueOf(Provider.local))
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -68,6 +73,7 @@ public class UserSeeder {
                     .accountNonExpired(true)
                     .credentialsNonExpired(true)
                     .enabled(true)
+                    .providerId(String.valueOf(Provider.local))
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -80,6 +86,7 @@ public class UserSeeder {
                     .accountNonExpired(true)
                     .credentialsNonExpired(true)
                     .enabled(true)
+                    .providerId(String.valueOf(Provider.local))
                     .password(passwordEncoder.encode("1234Password@!"))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
@@ -91,19 +98,19 @@ public class UserSeeder {
     }
     private void assignRolesToUsers(){
 
-        userService.AddRoleToUser("john123@gmail.com", "SUPER_ADMIN");
-        userService.AddRoleToUser("john123@gmail.com", "ADMIN");
-        userService.AddRoleToUser("john123@gmail.com", "USER");
+        addRoleToUserService.addRoleToUser("john123@gmail.com", "SUPER_ADMIN");
+        addRoleToUserService.addRoleToUser("john123@gmail.com", "ADMIN");
+        addRoleToUserService.addRoleToUser("john123@gmail.com", "USER");
 
-        userService.AddRoleToUser("jane456@gmail.com", "SUPER_ADMIN");
-        userService.AddRoleToUser("jane456@gmail.com", "ADMIN");
+        addRoleToUserService.addRoleToUser("jane456@gmail.com", "SUPER_ADMIN");
+        addRoleToUserService.addRoleToUser("jane456@gmail.com", "ADMIN");
 
-        userService.AddRoleToUser("mike789@gmail.com", "SUPER_ADMIN");
-        userService.AddRoleToUser("mike789@gmail.com", "ADMIN");
+        addRoleToUserService.addRoleToUser("mike789@gmail.com", "SUPER_ADMIN");
+        addRoleToUserService.addRoleToUser("mike789@gmail.com", "ADMIN");
 
-        userService.AddRoleToUser("sarah1011@gmail.com", "ADMIN");
+        addRoleToUserService.addRoleToUser("sarah1011@gmail.com", "ADMIN");
 
-        userService.AddRoleToUser("rob1213@gmail.com", "USER");
+        addRoleToUserService.addRoleToUser("rob1213@gmail.com", "USER");
 
     }
 }
