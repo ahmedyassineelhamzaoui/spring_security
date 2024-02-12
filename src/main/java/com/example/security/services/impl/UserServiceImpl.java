@@ -1,5 +1,7 @@
 package com.example.security.services.impl;
 
+import com.example.security.mapper.AppUserMapper;
+import com.example.security.models.dto.response.AppUserDTO;
 import com.example.security.models.entity.AppRole;
 import com.example.security.models.entity.AppUser;
 import com.example.security.repositories.RoleRepository;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final AppUserMapper appUserMapper;
+
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -35,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<AppUser> getAllUsers() {
-        return userRepository.findAll();
+    public List<AppUserDTO> getAllUsers() {
+        return userRepository.findAll().stream().map(appUserMapper::toDTO).toList();
     }
 }

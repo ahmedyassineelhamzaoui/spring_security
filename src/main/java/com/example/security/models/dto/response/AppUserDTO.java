@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -22,4 +23,7 @@ public class AppUserDTO {
     private boolean enabled;
     private LocalDateTime  createdAt;
     private LocalDateTime updatedAt;
+
+    private List<AppRoleDTO> authorities;
+
 }
