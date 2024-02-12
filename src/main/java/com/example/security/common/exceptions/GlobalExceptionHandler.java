@@ -7,6 +7,7 @@ import com.example.security.common.exceptions.custom.InvalidOauth2Exception;
 import com.example.security.common.exceptions.custom.UserAllReadyExistException;
 import com.example.security.common.responses.ResponseWithDetails;
 import com.example.security.common.responses.ResponseWithoutDetails;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -102,5 +103,12 @@ public class GlobalExceptionHandler {
         responseWithoutDetails.setStatus("400");
         responseWithoutDetails.setMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseWithoutDetails);
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ResponseWithoutDetails> handleExpiredJwtException(ExpiredJwtException e) {
+        responseWithoutDetails.setTimesTamps(LocalDateTime.now());
+        responseWithoutDetails.setStatus("400");
+        responseWithoutDetails.setMessage("Your session has expired. Please log in again.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseWithoutDetails);
     }
 }
