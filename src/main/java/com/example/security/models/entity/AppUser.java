@@ -31,6 +31,8 @@ public class AppUser implements UserDetails {
 
     private String password;
 
+    private String imageUrl;
+
     private boolean accountNonExpired=true ;
 
     private boolean accountNonLocked =true;
@@ -41,6 +43,10 @@ public class AppUser implements UserDetails {
 
     @Column(name = "provider_id")
     private String providerId;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
 
     private LocalDateTime createdAt;
 
