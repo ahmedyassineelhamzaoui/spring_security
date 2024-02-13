@@ -25,5 +25,4 @@ public class AppUserDTO {
     private LocalDateTime updatedAt;
 
     private List<AppRoleDTO> authorities;
-
 }

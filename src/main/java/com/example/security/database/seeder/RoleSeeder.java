@@ -18,9 +18,9 @@ public class RoleSeeder {
     public void seed(){
         if(roleRepository.count() == 0){
             List<AppRole> roles = List.of(
-                    AppRole.builder().authority("SUPER_ADMIN").build(),
-                    AppRole.builder().authority("ADMIN").build(),
-                    AppRole.builder().authority("USER").build()
+                    AppRole.builder().authority("ROLE_SUPER_ADMIN").build(),
+                    AppRole.builder().authority("ROLE_ADMIN").build(),
+                    AppRole.builder().authority("ROLE_USER").build()
             );
             roleRepository.saveAll(roles);
             assignPermissionsToRoles();
@@ -28,16 +28,16 @@ public class RoleSeeder {
     }
     private void assignPermissionsToRoles() {
 
-        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_ADD");
-        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_DELETE");
-        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_ADD_POST");
-        roleService.AddPermissionToRole("SUPER_ADMIN","CAN_EDIT");
+        roleService.AddPermissionToRole("ROLE_SUPER_ADMIN","CAN_ADD");
+        roleService.AddPermissionToRole("ROLE_SUPER_ADMIN","CAN_DELETE");
+        roleService.AddPermissionToRole("ROLE_SUPER_ADMIN","CAN_ADD_POST");
+        roleService.AddPermissionToRole("ROLE_SUPER_ADMIN","CAN_EDIT");
 
-        roleService.AddPermissionToRole("ADMIN","CAN_ADD");
-        roleService.AddPermissionToRole("ADMIN","CAN_EDIT");
-        roleService.AddPermissionToRole("ADMIN","CAN_ADD_POST");
+        roleService.AddPermissionToRole("ROLE_ADMIN","CAN_ADD");
+        roleService.AddPermissionToRole("ROLE_ADMIN","CAN_EDIT");
+        roleService.AddPermissionToRole("ROLE_ADMIN","CAN_ADD_POST");
 
-        roleService.AddPermissionToRole("USER","CAN_ADD_POST");
+        roleService.AddPermissionToRole("ROLE_USER","CAN_ADD_POST");
 
     }
 }

@@ -42,7 +42,7 @@ public class SecurityConfig {
 
 
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**","/api/v1/oauth2/**")
+                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
                         .permitAll().anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -55,7 +55,8 @@ public class SecurityConfig {
                                 userInfoEndpoint
                                         .userService(customOAuth2UserService)
                         )
-                ).addFilterBefore(tokenAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                )
+                .addFilterBefore(tokenAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 .logout(
                         (logout) -> logout.logoutUrl("/api/v1/auth/logout")
                                 .addLogoutHandler(logoutHandler)

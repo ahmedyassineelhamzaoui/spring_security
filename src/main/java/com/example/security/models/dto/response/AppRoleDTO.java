@@ -12,6 +12,6 @@ import java.util.UUID;
 @Builder
 public class AppRoleDTO {
 
-    private String authority;
+    private String name;
     private List<AppPermissionDTO> permissions;
 }

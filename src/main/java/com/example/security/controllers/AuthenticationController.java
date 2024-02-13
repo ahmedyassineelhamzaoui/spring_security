@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +53,23 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> verifyEmail(@RequestBody @Valid VerificationEmailRequest request){
         return ResponseEntity.ok(authenticationService.verifyEmail(request.getCode()));
     }
+    @PostMapping("/validate-token")
+    public ResponseEntity<Boolean> validateToken(@RequestBody TokenValidationRequest validationRequest) {
+        String token = validationRequest.getToken();
 
+        try {
+            UserDetails userDetails = userService.userDetailsService()
+                    .loadUserByUsername(jwtService.extractUserName(token));
+
+            if (jwtService.isTokenValid(token, userDetails)) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.ok(false);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.ok(false);
+        }
+    }
 
 }

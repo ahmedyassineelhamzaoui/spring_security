@@ -98,19 +98,19 @@ public class UserSeeder {
     }
     private void assignRolesToUsers(){
 
-        addRoleToUserService.addRoleToUser("john123@gmail.com", "SUPER_ADMIN");
-        addRoleToUserService.addRoleToUser("john123@gmail.com", "ADMIN");
-        addRoleToUserService.addRoleToUser("john123@gmail.com", "USER");
+        addRoleToUserService.addRoleToUser("john123@gmail.com", "ROLE_SUPER_ADMIN");
+        addRoleToUserService.addRoleToUser("john123@gmail.com", "ROLE_ADMIN");
+        addRoleToUserService.addRoleToUser("john123@gmail.com", "ROLE_USER");
 
-        addRoleToUserService.addRoleToUser("jane456@gmail.com", "SUPER_ADMIN");
-        addRoleToUserService.addRoleToUser("jane456@gmail.com", "ADMIN");
+        addRoleToUserService.addRoleToUser("jane456@gmail.com", "ROLE_SUPER_ADMIN");
+        addRoleToUserService.addRoleToUser("jane456@gmail.com", "ROLE_ADMIN");
 
-        addRoleToUserService.addRoleToUser("mike789@gmail.com", "SUPER_ADMIN");
-        addRoleToUserService.addRoleToUser("mike789@gmail.com", "ADMIN");
+        addRoleToUserService.addRoleToUser("mike789@gmail.com", "ROLE_SUPER_ADMIN");
+        addRoleToUserService.addRoleToUser("mike789@gmail.com", "ROLE_ADMIN");
 
-        addRoleToUserService.addRoleToUser("sarah1011@gmail.com", "ADMIN");
+        addRoleToUserService.addRoleToUser("sarah1011@gmail.com", "ROLE_ADMIN");
 
-        addRoleToUserService.addRoleToUser("rob1213@gmail.com", "USER");
+        addRoleToUserService.addRoleToUser("rob1213@gmail.com", "ROLE_USER");
 
     }
 }
