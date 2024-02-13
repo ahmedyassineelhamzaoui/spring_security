@@ -4,6 +4,7 @@ import com.example.security.common.responses.ResponseWithDetails;
 import com.example.security.common.responses.ResponseWithoutDetails;
 import com.example.security.models.dto.request.LoginRequest;
 import com.example.security.models.dto.request.SignupRequest;
+import com.example.security.models.dto.request.TokenValidationRequest;
 import com.example.security.models.dto.request.VerificationEmailRequest;
 import com.example.security.models.dto.response.LoginResponse;
 import com.example.security.services.facades.UserService;
